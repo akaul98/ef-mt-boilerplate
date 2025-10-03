@@ -1,0 +1,6 @@
+@ef_mt_boilerplate_HostAddress = http://localhost:5141
+
+GET {{ef_mt_boilerplate_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
