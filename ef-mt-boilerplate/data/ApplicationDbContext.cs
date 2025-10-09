@@ -1,13 +1,19 @@
 ﻿using ef_mt_boilerplate.Models;
 using Microsoft.EntityFrameworkCore;
+using ef_mt_boilerplate.Services.Interface;
+using System.Linq;
+using ef_mt_boilerplate.entity;
 
 namespace ef_mt_boilerplate.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        private readonly ITenantService _tenantService;
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, ITenantService tenantService)
             : base(options)
         {
+            _tenantService = tenantService;
         }
 
         public DbSet<Tenant> Tenants { get; set; }
@@ -23,7 +29,7 @@ namespace ef_mt_boilerplate.Data
                 .HasOne(u => u.Tenant)
                 .WithMany(t => t.Users)
                 .HasForeignKey(u => u.TenantId)
-                .OnDelete(DeleteBehavior.Restrict); // prevent multiple cascade paths
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Project → User (Owner)
             modelBuilder.Entity<Project>()
@@ -38,6 +44,20 @@ namespace ef_mt_boilerplate.Data
                 .WithMany(t => t.Projects)
                 .HasForeignKey(p => p.TenantId)
                 .OnDelete(DeleteBehavior.Restrict);
+        }
+
+        public override int SaveChanges()
+        {
+            var tenantId = _tenantService.GetCurrentTenantId();  // get current tenant
+
+            // Automatically assign TenantId for new entities implementing ITenantEntity
+            foreach (var entry in ChangeTracker.Entries()
+                         .Where(e => e.State == EntityState.Added && e.Entity is ITenantEntity))
+            {
+                ((ITenantEntity)entry.Entity).TenantId = tenantId;
+            }
+
+            return base.SaveChanges();
         }
     }
 }

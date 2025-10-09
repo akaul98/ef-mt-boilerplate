@@ -1,4 +1,6 @@
 using ef_mt_boilerplate.Data;
+using ef_mt_boilerplate.Services;
+using ef_mt_boilerplate.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer; // Add this using directive
 
@@ -12,6 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<ITenantService, TenantService>();
 
 var app = builder.Build();
 
