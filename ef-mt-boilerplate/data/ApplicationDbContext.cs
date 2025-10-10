@@ -43,6 +43,12 @@ namespace ef_mt_boilerplate.Data
                 .WithMany(t => t.Projects)
                 .HasForeignKey(p => p.TenantId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            var tenantId = _tenantService.GetCurrentTenantId();
+            // Apply global query filter for tenant isolation
+            modelBuilder.Entity<User>().HasQueryFilter(u => u.TenantId == tenantId);
+            modelBuilder.Entity<Project>().HasQueryFilter(p => p.TenantId == tenantId);
+
         }
 
         public override int SaveChanges()
