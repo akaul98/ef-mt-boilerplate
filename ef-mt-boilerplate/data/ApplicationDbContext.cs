@@ -1,8 +1,7 @@
-﻿using ef_mt_boilerplate.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ef_mt_boilerplate.Services.Interface;
 using System.Linq;
-using ef_mt_boilerplate.entity;
+using ef_mt_boilerplate.Entities;
 
 namespace ef_mt_boilerplate.Data
 {

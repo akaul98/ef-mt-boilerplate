@@ -1,6 +1,4 @@
-﻿
-
-namespace ef_mt_boilerplate.Models
+﻿namespace ef_mt_boilerplate.Entities
 {
     public class Tenant
     {

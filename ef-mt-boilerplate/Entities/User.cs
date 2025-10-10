@@ -1,6 +1,7 @@
-﻿namespace ef_mt_boilerplate.Models
+﻿namespace ef_mt_boilerplate.Entities
 {
-    public class User
+
+    public class User : ITenantEntity
     {
         public int UserId { get; set; }         // Primary key
         public string Name { get; set; }
