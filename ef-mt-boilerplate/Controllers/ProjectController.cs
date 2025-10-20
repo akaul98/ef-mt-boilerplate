@@ -24,17 +24,19 @@ namespace ef_mt_boilerplate.Controllers
         }
 
         [HttpGet("api/projects")]
-        public IActionResult GetProjects()
+        public async Task<IActionResult> GetProjects()
         {
-            // This will return only projects for the current tenant due to global query filter
-            var projects = _dbContext.Projects.IgnoreQueryFilters().ToList();
+            // This will return only projects for the current tenant due to global query
+            
+            var tenantId = _tenantService.GetCurrentTenantId();
+            var projects = await _dbContext.Projects.ToListAsync();
 
             // If you want to access the tenant id explicitly:
-            var tenantId = _tenantService.GetCurrentTenantId();
 
             return Ok(new { tenantId, projects });
         }
     }
 }
+
 
 
