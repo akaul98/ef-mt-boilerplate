@@ -31,7 +31,9 @@ namespace ef_mt_boilerplate.Services
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role),
-                new Claim("tenantId", tenantId.ToString())
+                new Claim("tenantId", tenantId.ToString()),
+                // Replace ClaimTypes.UserId with a custom claim type, since ClaimTypes does not define "UserId"
+                new Claim("UserId", user.UserId.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
